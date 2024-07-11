@@ -5,19 +5,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="style.css">
-</head>
 
-<body>
-  <h1> Activities </h1>
-  <section>
-  </section>
-
-  <script type="text/javascript" src="nwl-16/app.js"></script>
   <!-- Day.js is a library that manipulates displays dates and times. -->
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
   <script>dayjs.locale('pt-br')</script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <form onsubmit="saveActivity(event)">
+    <div>
+      <input type="text" placeholder="What is the activity?" name="activity" required>
+    </div>
+    <div>
+      <select name="day">
+        <option value="2024-07-14">14 de Julho</option>
+      </select>
+    </div>
+
+    <div>
+      <select name="hour">
+        <option value="10:30">10:30</option>
+      </select>
+    </div>
+
+    <button>Save activity</button>
+  </form>
+
+  <main>
+    <h1> Activities </h1>
+    <section></section>
+  </main>
+
+  <script src="./script.js"></script>
 </body>
 
 </html>
