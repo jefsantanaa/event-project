@@ -44,7 +44,7 @@ let activities = [
 
 // Created a function to create activity
 const createActivityItem = (activity) => {
-  let input = '<input type="checkbox" ';
+  let input = `<input onchange="finishActivity(event)" value="${activity.date}" type="checkbox" `;
   if (activity.finished) {
     input += 'checked';
   }
@@ -69,7 +69,8 @@ const createActivityItem = (activity) => {
 // Repeat activity code block
 const updateActivityList = () => {
   const section = document.querySelector('section');
-
+  section.innerHTML = '';
+  // Check if the list is empty
   if (activities.length == 0) {
     section.innerHTML = `<p>No activities registered.</p>`;
     return
@@ -83,6 +84,29 @@ updateActivityList();
 // Save Activity
 const saveActivity = (event) => {
   event.preventDefault();
+  const formContent = new FormData(event.target);
+
+  const name = formContent.get('activity');
+  const day = formContent.get('day');
+  const hour = formContent.get('hour');
+  const date = `${day} ${hour}`;
+
+  const newActivity = {
+    name: name,
+    date: date,
+    finished: false
+  };
+
+  const checkActivity = activities.find((activity) => {
+    return activity.date == newActivity.date
+  });
+
+  if (checkActivity) {
+    return alert('Day and time not available');
+  }
+
+  activities = [newActivity, ...activities];
+  updateActivityList();
 }
 
 const createSelectionDays = () => {
@@ -113,10 +137,26 @@ const createSelectionHours = () => {
   let availableHours = '';
 
   for (let i = 6; i < 23; i++) {
-    availableHours += `<option value="${i}:00">${i}:00</option>`;
-    availableHours += `<option value="${i}:30">${i}:30</option>`;
+    const hour = String(i).padStart(2, '0');
+    availableHours += `<option value="${hour}:00">${hour}:00</option>`;
+    availableHours += `<option value="${hour}:30">${hour}:30</option>`;
   }
 
   document.querySelector('select[name="hour"]').innerHTML = availableHours;
 }
 createSelectionHours();
+
+const finishActivity = (event) => {
+  const input = event.target;
+  const dateOfThisInput = input.value;
+
+  const activity = activities.find((activity) => {
+    return activity.date == dateOfThisInput;
+  });
+
+  if (!activity) {
+    return
+  }
+
+  activity.finished = !activity.finished;
+}
